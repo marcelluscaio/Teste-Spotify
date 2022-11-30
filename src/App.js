@@ -1,9 +1,9 @@
 import './App.css';
 import {useState, useEffect} from 'react';
+import { client_id, client_secret } from './keys.js'
 
 function App() {
-  const client_id = 'a01ac38bd9514c2eb5cf5e9acb2c9fa1';
-  const client_secret = 'ab22cec87e72492e9a2b5e5fdc0071d4';
+
   const [accessToken, setAccessToken] = useState("");
   const [input, setInput] = useState('');
   const [imagem, setImagem] = useState('http://www.correio24horas.com.br/blogs/correiodefuturo/wp-content/uploads/2013/07/construcao-298x300.jpg');
