@@ -1,14 +1,12 @@
 import './App.css';
 import {useState, useEffect} from 'react';
 
-const client_id = 'a01ac38bd9514c2eb5cf5e9acb2c9fa1';
-const client_secret = 'ab22cec87e72492e9a2b5e5fdc0071d4';
-
-
-
 function App() {
+  const client_id = 'a01ac38bd9514c2eb5cf5e9acb2c9fa1';
+  const client_secret = 'ab22cec87e72492e9a2b5e5fdc0071d4';
   const [accessToken, setAccessToken] = useState("");
   const [input, setInput] = useState('');
+  const [imagem, setImagem] = useState('http://www.correio24horas.com.br/blogs/correiodefuturo/wp-content/uploads/2013/07/construcao-298x300.jpg');
   useEffect(() => {
     let authParameters = {
       method: 'POST',
@@ -22,8 +20,23 @@ function App() {
       .then(data => setAccessToken(data.access_token))
   } , [])
 
-  async function search(){
-    console.log("Searching for " + input)
+  async function search(input){
+    console.log("Searching for " + input);
+    console.log("Searching with " + accessToken);
+
+    let busca = await fetch(`https://api.spotify.com/v1/search?q=${input}&type=artist`, {
+      method: 'GET',
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + accessToken
+      }
+    });
+    let buscaJSON = await busca.json();
+    console.log(buscaJSON.artists.items[0].images[0].url)
+    setImagem(buscaJSON.artists.items[0].images[0].url);
+    
+
   }
 
   return (
@@ -32,8 +45,9 @@ function App() {
         <input type={'text'} placeholder={'Your text here'} value={input} onChange={(e) => {setInput(e.target.value)}}/>
         <button onClick={(e) => {
           e.preventDefault();
-          search()}}>Click me!</button>
+          search(input)}}>Click me!</button>
       </form>
+      <img src={imagem} width={'200px'} height={'200px'}/>
       
     </div>
   );
